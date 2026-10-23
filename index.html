@@ -1,10 +1,24 @@
 <!doctype html>
 <html lang="en">
 <head>
+<script>document.documentElement.classList.add('js');</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Physics-Conditioned Video Diffusion for Fusion Capsule Polishing</title>
 <meta name="description" content="A controllable video diffusion surrogate for inertial confinement fusion (ICF) capsule polishing, conditioned on polishing speed and capsule-pad slip.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Physics-Conditioned Video Diffusion for Fusion Capsule Polishing">
+<meta property="og:description" content="A controllable video diffusion surrogate for ICF capsule polishing, conditioned on polishing speed and capsule-pad slip. NeurIPS 2026.">
+<meta property="og:image" content="https://shashankgalla.github.io/phy-cond-video-diff-icf-capsule-polishing-page/assets/img/rpm_sweep_grid.png">
+<meta property="og:url" content="https://shashankgalla.github.io/phy-cond-video-diff-icf-capsule-polishing-page/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Physics-Conditioned Video Diffusion for Fusion Capsule Polishing">
+<meta name="twitter:description" content="A controllable video diffusion surrogate for ICF capsule polishing. NeurIPS 2026.">
+<meta name="twitter:image" content="https://shashankgalla.github.io/phy-cond-video-diff-icf-capsule-polishing-page/assets/img/rpm_sweep_grid.png">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231f6f78'/%3E%3Ccircle cx='50' cy='42' r='22' fill='%23eef4f4'/%3E%3Cpath d='M20 78 L50 50 L80 78 Z' fill='none' stroke='%23eef4f4' stroke-width='6' stroke-linejoin='round'/%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&family=Source+Serif+4:wght@400;600&family=Noto+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -33,11 +47,11 @@
     <h1>Physics-Conditioned Video Diffusion with Kinematic Priors<br>for Fusion Capsule Polishing</h1>
 
     <div class="authors">
-      <span><a href="#">Shashank Galla</a><sup>1</sup></span>
-      <span><a href="#">Abhishek Hanchate</a><sup>1</sup></span>
-      <span><a href="#">Monika Biener</a><sup>2</sup></span>
-      <span><a href="#">Suhas Bhandarkar</a><sup>2</sup></span>
-      <span><a href="#">Satish Bukkapatnam</a><sup>1</sup></span>
+      <span>Shashank Galla<sup>1</sup></span>
+      <span>Abhishek Hanchate<sup>1</sup></span>
+      <span>Monika Biener<sup>2</sup></span>
+      <span>Suhas Bhandarkar<sup>2</sup></span>
+      <span>Satish Bukkapatnam<sup>1</sup></span>
     </div>
     <div class="affiliations">
       <span><sup>1</sup>Texas A&amp;M University</span>
@@ -46,15 +60,15 @@
     <div class="venue">NeurIPS 2026</div>
 
     <div class="cta-row">
-      <a class="btn btn-primary" href="../neurips/neurips_final/neurips_2026.pdf">
+      <a class="btn btn-primary" href="assets/paper/neurips_2026.pdf">
         <span class="icon">&#128196;</span> Paper (PDF)
       </a>
-      <a class="btn" href="#" title="Add repository URL before publishing">
-        <span class="icon">&#9733;</span> Code
-      </a>
-      <a class="btn" href="#" title="Add dataset URL before publishing">
-        <span class="icon">&#128230;</span> Data
-      </a>
+      <span class="btn btn-disabled" title="Not released yet">
+        <span class="icon">&#9733;</span> Code (soon)
+      </span>
+      <span class="btn btn-disabled" title="Not released yet">
+        <span class="icon">&#128230;</span> Data (soon)
+      </span>
       <a class="btn" href="#bibtex">
         <span class="icon">&#10077;</span> BibTeX
       </a>
@@ -74,7 +88,7 @@
 <!-- ============ ABSTRACT ============ -->
 <section id="abstract" class="section">
   <div class="section-inner narrow">
-    <h2>Abstract</h2>
+    <h2 class="reveal">Abstract</h2>
     <p>
       Video diffusion models can generate realistic process videos, but using them as controllable surrogates
       for industrial systems remains difficult when key control variables are only partially observable and no
@@ -101,8 +115,8 @@
 <!-- ============ PROBLEM SETUP ============ -->
 <section class="section alt">
   <div class="section-inner">
-    <h2>The setting</h2>
-    <div class="two-col">
+    <h2 class="reveal">The setting</h2>
+    <div class="two-col reveal">
       <div>
         <p>
           ICF target capsules are polished in a V&#8209;groove lapping fixture. The capsule circulates around the
@@ -130,35 +144,46 @@
 <!-- ============ METHOD ============ -->
 <section id="method" class="section">
   <div class="section-inner">
-    <h2>Method</h2>
+    <h2 class="reveal">Method</h2>
     <p>
       The frozen video diffusion backbone, LoRA adaptation, and Fourier conditioning tokens are standard components.
       Applying and evaluating them for a real industrial process with no available simulator is the contribution.
     </p>
-    <figure class="full-bleed-figure">
-      <img src="assets/img/methodology.png" alt="Method overview diagram" loading="lazy">
-      <figcaption>
-        SVD&#8209;xt is frozen (gray); only LoRA adapters and the Fourier physics encoder (blue) are trained.
-        The operating scalars (<i>&omega;<sub>p</sub></i>, <i>S<sub>C</sub></i>) become cross&#8209;attention tokens
-        and kinematic targets for two latent losses, <i>L</i><sub>dyn</sub> and <i>L</i><sub>ratio</sub>, computed
-        on the predicted clean latent.
-      </figcaption>
-    </figure>
+    <div class="stepper reveal" id="method-stepper"
+         data-steps='[27,73.5,100]'
+         data-titles='["Input","Diffusion core","Kinematic losses"]'
+         data-captions='[
+           "A polishing video and the requested operating scalars (RPM, slip ratio) enter the model. The first frame is encoded by a frozen CLIP image encoder; each scalar is Fourier-encoded and projected by a small MLP into a token.",
+           "SVD-xt is frozen (gray); only the LoRA adapters and the Fourier physics encoder (blue) are trained. The physics tokens enter every cross-attention layer, conditioning the denoised latent on the requested speed and slip before the VAE decodes it back to video.",
+           "The predicted clean latent yields a frame-difference scalar, compared against the analytical sliding speed and slip ratio from the differentiable V-groove kinematics. Together L_dyn and L_ratio push the generated dynamics toward the requested physics."
+         ]'>
+      <div class="stepper-frame">
+        <div class="layer layer-bg"><img src="assets/img/methodology.png" alt="" aria-hidden="true"></div>
+        <div class="layer layer-fg"><img src="assets/img/methodology.png" alt="Method overview diagram, revealed stage by stage"></div>
+        <div class="sweep-edge"></div>
+      </div>
+      <div class="stepper-controls">
+        <button type="button" class="stepper-nav-btn" id="stepper-prev" aria-label="Previous stage">&#8249;</button>
+        <div class="stepper-dots" id="stepper-dots"></div>
+        <button type="button" class="stepper-nav-btn" id="stepper-next" aria-label="Next stage">&#8250;</button>
+      </div>
+      <div class="stepper-caption" id="stepper-caption"></div>
+    </div>
 
     <div class="contrib-grid">
-      <div class="contrib-card">
+      <div class="contrib-card reveal">
         <h3>Application</h3>
         <p>A real industrial process, ICF capsule polishing, where no simulator or differentiable
         physics model exists for the real footage, and the only available physics is a low&#8209;dimensional
         analytical map from (<i>&omega;<sub>p</sub></i>, <i>S<sub>C</sub></i>) to kinematic scalars.</p>
       </div>
-      <div class="contrib-card">
+      <div class="contrib-card reveal">
         <h3>Evaluation protocol</h3>
         <p>We score generated videos by tracking capsule motion, inverting the kinematic model, and measuring rank
         agreement in physical units (speed and slip) under a physical validity gate, instead of relying only on
         pixel&#8209;level video metrics.</p>
       </div>
-      <div class="contrib-card">
+      <div class="contrib-card reveal">
         <h3>Empirical results</h3>
         <p>Speed rank exceeds 0.97 on real videos; slip rank reaches 0.735 on synthetic videos with known labels.
         Slip is learnable when exposed; the bottleneck is label availability, not model capacity.</p>
@@ -170,23 +195,23 @@
 <!-- ============ RESULTS: STATS ============ -->
 <section id="results" class="section alt">
   <div class="section-inner">
-    <h2>Results</h2>
+    <h2 class="reveal">Results</h2>
 
     <div class="stat-row">
-      <div class="stat-card">
-        <div class="stat-value">&ge;0.97</div>
+      <div class="stat-card reveal">
+        <div class="stat-value" data-target="0.97" data-decimals="2" data-prefix="&#8805;">&ge;0.97</div>
         <div class="stat-label">speed rank accuracy, real videos</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-value">0.735</div>
+      <div class="stat-card reveal">
+        <div class="stat-value" data-target="0.735" data-decimals="3">0.735</div>
         <div class="stat-label">slip rank accuracy, synthetic videos (known labels)</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-value">93&ndash;98%</div>
+      <div class="stat-card reveal">
+        <div class="stat-value" data-target="98" data-decimals="0" data-prefix="93&ndash;" data-suffix="%">93&ndash;98%</div>
         <div class="stat-label">gate yield, real-regime clips</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-value">604</div>
+      <div class="stat-card reveal">
+        <div class="stat-value" data-target="604" data-decimals="0">604</div>
         <div class="stat-label">real clips, 4 polishing speeds</div>
       </div>
     </div>
@@ -201,29 +226,29 @@
     <p class="section-note">Default model, held&#8209;out clips at each of the four training speeds. Clips are 30
     frames at the native capture resolution used during training (a thin top&#8209;down crop of the groove track).</p>
     <div class="video-grid">
-      <figure><video autoplay loop muted playsinline><source src="assets/video/gen_real_21rpm.mp4" type="video/mp4"></video><figcaption>21 RPM</figcaption></figure>
-      <figure><video autoplay loop muted playsinline><source src="assets/video/gen_real_48rpm.mp4" type="video/mp4"></video><figcaption>48 RPM</figcaption></figure>
-      <figure><video autoplay loop muted playsinline><source src="assets/video/gen_real_78rpm.mp4" type="video/mp4"></video><figcaption>78 RPM</figcaption></figure>
-      <figure><video autoplay loop muted playsinline><source src="assets/video/gen_real_108rpm.mp4" type="video/mp4"></video><figcaption>108 RPM</figcaption></figure>
+      <figure class="reveal"><video autoplay loop muted playsinline><source src="assets/video/gen_real_21rpm.mp4" type="video/mp4"></video><figcaption>21 RPM</figcaption></figure>
+      <figure class="reveal"><video autoplay loop muted playsinline><source src="assets/video/gen_real_48rpm.mp4" type="video/mp4"></video><figcaption>48 RPM</figcaption></figure>
+      <figure class="reveal"><video autoplay loop muted playsinline><source src="assets/video/gen_real_78rpm.mp4" type="video/mp4"></video><figcaption>78 RPM</figcaption></figure>
+      <figure class="reveal"><video autoplay loop muted playsinline><source src="assets/video/gen_real_108rpm.mp4" type="video/mp4"></video><figcaption>108 RPM</figcaption></figure>
     </div>
 
     <h3>Generated video, synthetic regime (known slip = 0.50)</h3>
     <p class="section-note">Same model, rendered regime with known slip labels, used to test whether slip is
     identifiable at all when it is actually exposed to the conditioning and evaluation pipeline.</p>
     <div class="video-grid">
-      <figure><video autoplay loop muted playsinline><source src="assets/video/gen_synth_21rpm.mp4" type="video/mp4"></video><figcaption>21 RPM</figcaption></figure>
-      <figure><video autoplay loop muted playsinline><source src="assets/video/gen_synth_48rpm.mp4" type="video/mp4"></video><figcaption>48 RPM</figcaption></figure>
-      <figure><video autoplay loop muted playsinline><source src="assets/video/gen_synth_78rpm.mp4" type="video/mp4"></video><figcaption>78 RPM</figcaption></figure>
-      <figure><video autoplay loop muted playsinline><source src="assets/video/gen_synth_108rpm.mp4" type="video/mp4"></video><figcaption>108 RPM</figcaption></figure>
+      <figure class="reveal"><video autoplay loop muted playsinline><source src="assets/video/gen_synth_21rpm.mp4" type="video/mp4"></video><figcaption>21 RPM</figcaption></figure>
+      <figure class="reveal"><video autoplay loop muted playsinline><source src="assets/video/gen_synth_48rpm.mp4" type="video/mp4"></video><figcaption>48 RPM</figcaption></figure>
+      <figure class="reveal"><video autoplay loop muted playsinline><source src="assets/video/gen_synth_78rpm.mp4" type="video/mp4"></video><figcaption>78 RPM</figcaption></figure>
+      <figure class="reveal"><video autoplay loop muted playsinline><source src="assets/video/gen_synth_108rpm.mp4" type="video/mp4"></video><figcaption>108 RPM</figcaption></figure>
     </div>
 
-    <figure class="full-bleed-figure">
+    <figure class="full-bleed-figure reveal">
       <img src="assets/img/rpm_sweep_grid.png" alt="Ground truth versus generated frames across RPMs and timesteps" loading="lazy">
       <figcaption>Ground truth vs. generated frames at t = 0, 15, 29 across all four speeds, both regimes.
       Displacement increases with RPM in both the real video and the generated clips.</figcaption>
     </figure>
 
-    <details class="expand-block">
+    <details class="expand-block reveal">
       <summary>Show all 30 frames per speed (full clips, both regimes)</summary>
       <figure>
         <img src="assets/img/qual_frames_real.jpg" alt="All 30 generated frames at each real-regime speed" loading="lazy">
@@ -240,20 +265,20 @@
 <!-- ============ EVALUATION ============ -->
 <section id="evaluation" class="section">
   <div class="section-inner">
-    <h2>Evaluation protocol</h2>
+    <h2 class="reveal">Evaluation protocol</h2>
     <p>
       Perceptual metrics like FID or FVD say nothing about whether a generated video obeys the requested physics.
       We instead track the capsule in generated pixels, recover its circulation speed, invert the kinematic model
       to estimate slip, and discard clips whose recovered motion falls outside the physically plausible range for
       the suite before any rank is computed.
     </p>
-    <figure class="full-bleed-figure">
+    <figure class="full-bleed-figure reveal">
       <img src="assets/img/slip_evaluation.png" alt="Evaluation pipeline: detection, tracking, inversion, validity gate" loading="lazy">
       <figcaption>Generated clips pass through capsule detection, tracking, circulation recovery, kinematic
       inversion, and a physical validity gate before rank accuracy is computed.</figcaption>
     </figure>
 
-    <div class="two-col reverse">
+    <div class="two-col reverse reveal">
       <figure>
         <img class="eval-demo-video" src="assets/video/tracking_demo.gif" alt="Tracking overlay on a generated clip, following capsules with bounding boxes" loading="lazy">
         <figcaption>Live tracking overlay on a generated clip. The box follows the capsule the aggregation step keeps.</figcaption>
@@ -275,8 +300,8 @@
 <!-- ============ LIMITATIONS ============ -->
 <section id="limitations" class="section alt">
   <div class="section-inner narrow">
-    <h2>Limitations</h2>
-    <ul class="limitations-list">
+    <h2 class="reveal">Limitations</h2>
+    <ul class="limitations-list reveal">
       <li>Real slip is unmeasured. The model is a kinematic video surrogate, not a validated real&#8209;slip
       controller. The synthetic result demonstrates identifiability when labels exist, not synthetic&#8209;to&#8209;real
       transfer.</li>
@@ -295,8 +320,8 @@
 <!-- ============ BIBTEX ============ -->
 <section id="bibtex" class="section">
   <div class="section-inner narrow">
-    <h2>BibTeX</h2>
-    <pre class="bibtex-block"><code>@inproceedings{galla2026physdiffpolish,
+    <h2 class="reveal">BibTeX</h2>
+    <pre class="bibtex-block reveal"><code>@inproceedings{galla2026physdiffpolish,
   title     = {Physics-Conditioned Video Diffusion with Kinematic Priors
                for Fusion Capsule Polishing},
   author    = {Galla, Shashank and Hanchate, Abhishek and Biener, Monika
@@ -312,9 +337,10 @@
 <footer class="site-footer">
   <div class="section-inner narrow">
     <p>Texas A&amp;M University &middot; Lawrence Livermore National Laboratory</p>
-    <p class="footer-note">Draft project page, not yet published. Built for internal review.</p>
+    <p class="footer-note">Code and data links will be added on release.</p>
   </div>
 </footer>
 
+<script src="script.js"></script>
 </body>
 </html>
