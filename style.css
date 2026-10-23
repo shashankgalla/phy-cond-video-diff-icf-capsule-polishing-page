@@ -349,19 +349,17 @@ figcaption {
    Motion layer: scroll reveal, counters, hover polish
    ====================================================== */
 @media (prefers-reduced-motion: no-preference) {
-  /* Scoped to html.js (set synchronously in <head>) so content stays visible
-     by default and only animates in if script actually runs. If JS fails to
-     load, errors out, or IntersectionObserver never fires for any reason,
-     nothing is ever permanently hidden. */
-  html.js .reveal {
-    opacity: 0;
-    transform: translateY(22px);
-    transition: opacity .7s cubic-bezier(.22,.9,.3,1), transform .7s cubic-bezier(.22,.9,.3,1);
-  }
-  .reveal.in-view {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  /* The scroll-reveal fade (.reveal/.in-view, driven by IntersectionObserver
+     in script.js) was removed after it caused real, hard-to-diagnose
+     visibility bugs for a purely decorative effect: a CSS specificity
+     mistake made content permanently invisible in every real browser for
+     a period, independent of any testing-tool artifacts. The .reveal/
+     in-view classes are still present in the HTML as inert hooks but no
+     longer do anything; everything renders at normal opacity by default.
+     The h2 underline-draw-in (near the top of this file) already handles
+     its own .in-view styling outside this media query and was never a
+     visibility risk, since text itself was never hidden by it. */
+
   .hero h1, .hero .authors, .hero .affiliations, .hero .venue, .hero .cta-row {
     opacity: 0;
     transform: translateY(10px);
