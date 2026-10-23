@@ -416,11 +416,19 @@ figcaption {
 .stepper-frame {
   position: relative;
   width: 100%;
+  /* padding-top intrinsic-ratio fallback (1018/2200) for browsers without
+     aspect-ratio support; aspect-ratio below overrides it where supported.
+     Without one of these, the two position:absolute image layers inside
+     contribute no height at all and the whole frame collapses to 0px. */
+  padding-top: 46.2727%;
   aspect-ratio: 2200 / 1018;
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid var(--border);
   background: #fff;
+}
+@supports (aspect-ratio: 1 / 1) {
+  .stepper-frame { padding-top: 0; }
 }
 .stepper-frame img {
   display: block;
