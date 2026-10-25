@@ -416,12 +416,12 @@ figcaption {
 .stepper-frame {
   position: relative;
   width: 100%;
-  /* padding-top intrinsic-ratio fallback (1018/2200) for browsers without
+  /* padding-top intrinsic-ratio fallback (1080/1882) for browsers without
      aspect-ratio support; aspect-ratio below overrides it where supported.
      Without one of these, the two position:absolute image layers inside
      contribute no height at all and the whole frame collapses to 0px. */
-  padding-top: 46.2727%;
-  aspect-ratio: 2200 / 1018;
+  padding-top: 57.3858%;
+  aspect-ratio: 1882 / 1080;
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -447,7 +447,10 @@ figcaption {
   opacity: .32;
 }
 .stepper-frame .layer-fg {
-  clip-path: inset(0 var(--hide, 0%) 0 0);
+  /* Default: plain left-to-right reveal. The stepper JS overrides this with
+     a polygon() clip when the figure has a separate band (e.g. an Inference
+     row below the main diagram) that shouldn't appear until its own stage. */
+  clip-path: var(--clip, inset(0 var(--hide, 0%) 0 0));
   transition: clip-path .85s cubic-bezier(.65,0,.35,1);
 }
 .stepper-frame .sweep-edge {

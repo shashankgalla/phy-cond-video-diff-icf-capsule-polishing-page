@@ -150,12 +150,14 @@
       Applying and evaluating them for a real industrial process with no available simulator is the contribution.
     </p>
     <div class="stepper reveal" id="method-stepper"
-         data-steps='[27,73.5,100]'
-         data-titles='["Input","Diffusion core","Kinematic losses"]'
+         data-steps='[33,74,100,100]'
+         data-band='78.3'
+         data-titles='["Input","Diffusion core","Kinematic losses","Inference"]'
          data-captions='[
            "A polishing video and the requested operating scalars (RPM, slip ratio) enter the model. The first frame is encoded by a frozen CLIP image encoder; each scalar is Fourier-encoded and projected by a small MLP into a token.",
-           "SVD-xt is frozen (gray); only the LoRA adapters and the Fourier physics encoder (blue) are trained. The physics tokens enter every cross-attention layer, conditioning the denoised latent on the requested speed and slip before the VAE decodes it back to video.",
-           "The predicted clean latent yields a frame-difference scalar, compared against the analytical sliding speed and slip ratio from the differentiable V-groove kinematics. Together L_dyn and L_ratio push the generated dynamics toward the requested physics."
+           "SVD-xt is frozen (gray); only the LoRA adapters and the Fourier physics encoder (blue) are trained. The physics tokens enter every cross-attention layer, conditioning the denoised latent on the requested speed and slip. Training ends at the predicted clean latent; nothing is decoded to pixels yet.",
+           "The predicted clean latent yields a frame-difference scalar, compared against the analytical sliding speed and slip ratio from the differentiable V-groove kinematics. Together L_dyn and L_ratio push the generated dynamics toward the requested physics.",
+           "At inference there is no target clip. Starting from random noise, the same frozen encoders and trained adapters are reused to build the conditioning once, and the UNet alternates with the sampling scheduler for the DDIM steps. Only the final latent is decoded by the frozen VAE, once, into the generated video."
          ]'>
       <div class="stepper-frame">
         <div class="layer layer-bg"><img src="assets/img/methodology.png" alt="" aria-hidden="true"></div>

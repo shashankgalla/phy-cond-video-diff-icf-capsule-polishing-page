@@ -110,6 +110,10 @@
     var steps = JSON.parse(root.dataset.steps);
     var titles = JSON.parse(root.dataset.titles);
     var captions = JSON.parse(root.dataset.captions);
+    // Optional: % of the image height occupied by the main (top) diagram band.
+    // When set, the final step reveals the remaining band below it (e.g. an
+    // "Inference" row) instead of just sweeping further right.
+    var band = root.dataset.band ? parseFloat(root.dataset.band) : null;
 
     var frame = root.querySelector(".stepper-frame");
     var dotsWrap = document.getElementById("stepper-dots");
@@ -136,8 +140,16 @@
     function setStep(i) {
       current = ((i % steps.length) + steps.length) % steps.length;
       var pct = steps[current];
+      var isLast = current === steps.length - 1;
       frame.style.setProperty("--hide", (100 - pct) + "%");
       frame.style.setProperty("--edge", pct + "%");
+      if (band !== null) {
+        // Sweep left-to-right within the top band for every step except the
+        // last, which also reveals the band below (e.g. Inference) in full.
+        var bandPct = isLast ? 100 : band;
+        var clip = "polygon(0% 0%, " + pct + "% 0%, " + pct + "% " + bandPct + "%, 0% " + bandPct + "%)";
+        frame.style.setProperty("--clip", clip);
+      }
       captionEl.textContent = captions[current];
       Array.prototype.forEach.call(dotsWrap.children, function (el, idx) {
         el.classList.toggle("active", idx === current);
