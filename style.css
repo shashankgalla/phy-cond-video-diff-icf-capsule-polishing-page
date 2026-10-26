@@ -456,12 +456,17 @@ figcaption {
 .stepper-frame .sweep-edge {
   position: absolute;
   top: 0;
-  bottom: 0;
+  /* Confined to the band the sweep is actually revealing (the top diagram),
+     not the full frame height, so it doesn't run down through a lower band
+     (e.g. Inference) that this stage hasn't revealed yet. On the final
+     stage (full reveal, no meaningful x-position) it fades out instead. */
+  height: var(--band, 100%);
+  opacity: var(--edge-opacity, 1);
   left: var(--edge, 0%);
   width: 3px;
   background: linear-gradient(180deg, transparent, var(--accent), transparent);
   box-shadow: 0 0 14px 2px rgba(31,111,120,.55);
-  transition: left .85s cubic-bezier(.65,0,.35,1);
+  transition: left .85s cubic-bezier(.65,0,.35,1), height .85s cubic-bezier(.65,0,.35,1), opacity .5s ease;
 }
 
 .stepper-controls {

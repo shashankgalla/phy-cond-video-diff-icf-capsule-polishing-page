@@ -149,6 +149,11 @@
         var bandPct = isLast ? 100 : band;
         var clip = "polygon(0% 0%, " + pct + "% 0%, " + pct + "% " + bandPct + "%, 0% " + bandPct + "%)";
         frame.style.setProperty("--clip", clip);
+        // Keep the glowing sweep-edge confined to the band it's actually
+        // sweeping through, and fade it out on the final (full-reveal) stage
+        // where an x-position no longer means anything.
+        frame.style.setProperty("--band", band + "%");
+        frame.style.setProperty("--edge-opacity", isLast ? "0" : "1");
       }
       captionEl.textContent = captions[current];
       Array.prototype.forEach.call(dotsWrap.children, function (el, idx) {
