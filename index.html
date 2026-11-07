@@ -60,9 +60,9 @@
     <div class="venue">NeurIPS 2026</div>
 
     <div class="cta-row">
-      <a class="btn btn-primary" href="assets/paper/neurips_2026_v7.pdf" download="neurips_2026.pdf">
-        <span class="icon">&#128196;</span> Paper (PDF)
-      </a>
+      <span class="btn btn-disabled" title="Paper link will be added on release">
+        <span class="icon">&#128196;</span> Paper (coming soon)
+      </span>
       <a class="btn" href="https://github.com/shashankgalla/phy-cond-video-diff-models-smart-lab-isen-tamu">
         <span class="icon">&#9733;</span> Code
       </a>
@@ -95,15 +95,16 @@
       simulator or differentiable physics model is available. We study this regime in inertial confinement fusion
       (ICF) target capsule polishing, where surface defects can degrade fusion yield. The dynamics are governed by
       the polishing speed <i>&omega;<sub>p</sub></i> and capsule&ndash;pad slip <i>S<sub>C</sub></i>. While capsule
-      motion can be monitored from video, <i>S<sub>C</sub></i> is only indirectly observable.
+      motion can be monitored from video, <i>S<sub>C</sub></i> is not directly observable.
     </p>
     <p>
-      Using only an analytical kinematic model, we adapt a frozen Stable Video Diffusion (SVD&#8209;xt) backbone via
-      LoRA and condition the generation on Fourier&#8209;encoded physics parameters. Two training objectives operate
-      on latent frame&#8209;difference dynamics: a batch&#8209;level correlation loss aligning them with the
-      analytical sliding speed, and a stratified ratio&#8209;matching loss that isolates slip structure from the
-      dominant speed&#8209;driven variance. We evaluate kinematic consistency by tracking capsule motion in
-      generated videos, inverting the kinematic model, and measuring rank agreement under a physical validity gate.
+      To model these dynamics, we adapt a frozen Stable Video Diffusion (SVD&#8209;xt) backbone via LoRA, condition
+      generation on Fourier encodings of (<i>&omega;<sub>p</sub></i>, <i>S<sub>C</sub></i>), and use an analytical
+      kinematic model to guide training. Two training objectives operate on latent frame&#8209;difference dynamics:
+      a batch&#8209;level correlation loss aligning them with the analytical sliding speed, and a stratified
+      ratio&#8209;matching loss that isolates slip structure from the dominant speed&#8209;driven variance. We
+      evaluate kinematic consistency by tracking capsule motion in generated videos, inverting the kinematic model,
+      and measuring rank agreement under a physical validity gate.
     </p>
     <p>
       For speed, rank accuracy exceeds <b>0.97</b> on real data; for slip, it reaches <b>0.735</b> with Spearman
